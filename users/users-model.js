@@ -14,6 +14,15 @@ function updateUser(id, user) {
     .update(user, ['user_id', 'username', 'password', 'phone']);
 }
 
+async function findId(username) {
+  const data = await db('users').select('user_id').where('username', username);
+  try {
+    return data[0];
+  } catch {
+    next();
+  }
+}
+
 function findById(id) {
   return db('users')
     .select('user_id', 'username', 'phone')
@@ -31,4 +40,5 @@ module.exports = {
   updateUser,
   findById,
   add,
+  findId,
 };

@@ -53,12 +53,17 @@ router.post('/login', async (req, res, next) => {
     }
 
     const token = buildToken(user);
-
-    res.cookie('token', token);
-    res.status(200).json({
-      message: `Welcome, ${username}`,
-      token: token,
-    });
+    const data = users
+      .findId(username)
+      .then((id) => {
+        res.cookie('token', token);
+        res.status(200).json({
+          message: `Welcome, ${username}`,
+          user_id: id.user_id,
+          token: token,
+        });
+      })
+      .catch(next);
   } catch (err) {
     next(err);
   }
